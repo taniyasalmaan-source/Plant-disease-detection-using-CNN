@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Check a rose leaf{% endblock %}
+{% block content %}
+<section class="page-hero compact-hero"><div class="container"><div class="eyebrow">Rose leaf check</div><h1>Let's take a <em>closer look.</em></h1><p>Choose a clear photo of one rose leaf. Good light and a simple background help.</p></div></section>
+<section class="detect-section"><div class="container detect-layout">
+  <div class="upload-panel">
+    <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Choose or drop a rose leaf image">
+      <input id="imageInput" type="file" hidden>
+      <div id="uploadPrompt" class="upload-prompt"><div class="upload-symbol">↑</div><h2>Drop your leaf photo here</h2><p>or <button type="button" class="inline-button" id="browseButton">browse files</button> from your device</p><div class="upload-meta">JPG or PNG · Up to 8 MB</div></div>
+      <div id="previewWrap" class="preview-wrap" hidden><img id="imagePreview" alt="Selected rose leaf preview"><span class="preview-hint">Preview ready</span></div>
+    </div>
+    <div id="selectedFileName" class="selected-file-name" aria-live="polite" hidden></div>
+    <div class="upload-controls"><label class="camera-button" for="cameraInput">◎ <span>Use camera</span><input id="cameraInput" type="file" accept="image/*" capture="environment" hidden></label><button id="removeButton" class="remove-button" type="button" hidden>Remove image</button></div>
+    <div id="uploadError" class="upload-error" role="alert" hidden></div>
+    <button id="detectButton" type="button" class="btn btn-primary-green detect-button" disabled>Check leaf health <span aria-hidden="true">→</span></button>
+    <div id="loadingState" class="loading-state" aria-live="polite" hidden><span class="spinner"></span> Looking at your leaf…</div>
+    <div id="modelNotice" class="model-notice" role="status" hidden></div>
+  </div>
+  <aside class="guide-panel"><div class="guide-icon">✿</div><h2>For a better check</h2><ul><li>Photograph one leaf, close up.</li><li>Use natural, even light.</li><li>Keep the leaf in focus.</li><li>Include the affected area and leaf edges.</li></ul><div class="guide-note"><strong>A note on results</strong><p>Image screening can be uncertain. Compare with other leaves and consult a local expert if symptoms spread.</p></div></aside>
+</div></section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/detect.js', v='20261113-3') }}" defer></script>{% endblock %}

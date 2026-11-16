@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Your rose leaf check{% endblock %}
+{% block content %}
+{% set disease = record.disease %}
+<section class="page-hero compact-hero result-hero"><div class="container"><div class="eyebrow">Your leaf check</div><h1>Here's what we <em>noticed.</em></h1><p>Use this as a helpful starting point, not a definitive diagnosis.</p></div></section>
+<section class="result-section"><div class="container">
+  <div class="result-summary card-soft">
+    <div class="result-photo"><img src="{{ url_for('static', filename='uploads/' ~ record.image_filename) }}" alt="Uploaded rose leaf"></div>
+    <div class="result-overview">
+      <span class="status-pill status-{{ disease.status }}"><span></span> STATUS: {{ 'UNCERTAIN' if disease.status == 'unidentified' else disease.status|upper }}</span>
+      <h2>{{ disease.display_name }}</h2>
+      <p class="result-filename">Uploaded image: <span>{{ record.original_filename }}</span></p>
+      {% if disease.status == 'healthy' %}<p class="result-good-news">Your rose leaf is healthy. Good news!</p>{% else %}<p>{{ disease.description }}</p>{% endif %}
+      {% if disease.status == 'unidentified' %}
+      <div class="confidence-row"><span>Top model score, not a prediction</span><strong>{{ "%.1f"|format(record.model_score * 100) }}%</strong></div>
+      <div class="confidence-track" role="progressbar" aria-label="Top model score" aria-valuenow="{{ (record.model_score * 100)|round|int }}" aria-valuemin="0" aria-valuemax="100"><span style="width: {{ (record.model_score * 100)|round(1) }}%"></span></div>
+      {% else %}
+      <div class="confidence-row"><span>Model confidence</span><strong>{{ "%.1f"|format(record.confidence * 100) }}%</strong></div>
+      <div class="confidence-track" role="progressbar" aria-label="Model confidence" aria-valuenow="{{ (record.confidence * 100)|round|int }}" aria-valuemin="0" aria-valuemax="100"><span style="width: {{ (record.confidence * 100)|round(1) }}%"></span></div>
+      {% endif %}
+      <div class="class-score-grid result-class-scores">
+        <div class="class-score"><div><span>Healthy score</span><strong>{{ "%.1f"|format(record.probability_healthy * 100) }}%</strong></div><div class="score-track"><span class="score-fill-healthy" style="width: {{ (record.probability_healthy * 100)|round(1) }}%"></span></div></div>
+        <div class="class-score"><div><span>Unhealthy score</span><strong>{{ "%.1f"|format(record.probability_unhealthy * 100) }}%</strong></div><div class="score-track"><span class="score-fill-unhealthy" style="width: {{ (record.probability_unhealthy * 100)|round(1) }}%"></span></div></div>
+      </div>
+      {% if model_warning %}<p class="confidence-caveat">{{ model_warning }}</p>{% else %}<p class="confidence-caveat">This binary screening cannot identify a specific disease. Confidence is not a diagnosis; ask a local plant-health expert if you are unsure.</p>{% endif %}
+    </div>
+  </div>
+  {% if disease.status == 'unidentified' %}
+  <div class="row g-4 result-info-row"><div class="col-12"><article class="info-card"><div class="info-card-label">Low-confidence result</div><h3>The scores are near the model's decision boundary</h3><ul><li>This is an uncertainty state, not a third trained class.</li><li>A clear leaf can still receive close scores when the model has too little training data.</li><li>There is no separate rose-leaf-versus-other-image detector in this project.</li></ul></article></div></div>
+  {% else %}
+  <div class="row g-4 result-info-row">
+    <div class="col-md-6"><article class="info-card"><div class="info-card-label">01 · What to look for</div><h3>Symptoms</h3><ul>{% for item in disease.symptoms %}<li>{{ item }}</li>{% endfor %}</ul></article></div>
+    <div class="col-md-6"><article class="info-card"><div class="info-card-label">02 · What may contribute</div><h3>Possible causes</h3><ul>{% for item in disease.causes %}<li>{{ item }}</li>{% endfor %}</ul></article></div>
+    <div class="col-md-6"><article class="info-card"><div class="info-card-label">03 · Keep it in check</div><h3>Precautions</h3><ul>{% for item in disease.precautions %}<li>{{ item }}</li>{% endfor %}</ul></article></div>
+    <div class="col-md-6"><article class="info-card treatment-card"><div class="info-card-label">04 · A practical next step</div><h3>{{ 'Healthy rose care' if disease.status == 'healthy' else 'Treatment suggestions' }}</h3><ul>{% for item in disease.treatment %}<li>{{ item }}</li>{% endfor %}</ul><p class="safety-note">Always follow product labels and local guidance. When in doubt, ask a qualified plant-health professional.</p></article></div>
+  </div>
+  {% endif %}
+  <div class="result-actions"><a class="btn btn-primary-green" href="{{ url_for('detect') }}">Check another leaf <span aria-hidden="true">→</span></a><a href="{{ url_for('history') }}" class="text-link">View check history <span aria-hidden="true">↗</span></a></div>
+</div></section>
+{% endblock %}

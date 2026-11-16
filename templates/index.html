@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Rose leaf health{% endblock %}
+{% block content %}
+<section class="hero-section">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="eyebrow-line"></span> A little care goes a long way</div>
+      <h1>Help your roses <em>thrive.</em></h1>
+      <p class="hero-lede">Check whether a rose leaf appears healthy or unhealthy. Upload a clear photo and get practical, easy-to-follow care guidance.</p>
+      <div class="hero-actions">
+        <a href="{{ url_for('detect') }}" class="btn btn-primary-green btn-lg">Start a leaf check <span aria-hidden="true">→</span></a>
+        <a href="{{ url_for('about') }}" class="text-link">How it works <span aria-hidden="true">↗</span></a>
+        <a href="{{ url_for('dashboard') }}" class="text-link">Open dashboard <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-trust"><span class="trust-icon">✓</span> Private by design <span class="trust-dot">·</span> Image-based screening</div>
+    </div>
+    <div class="hero-art" aria-label="Illustration of a rose plant" role="img">
+      <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+      <div class="art-sun"></div><div class="art-leaf leaf-one"></div><div class="art-leaf leaf-two"></div>
+      <div class="art-stem"></div><div class="art-rose"><span></span><i></i><b></b></div>
+      <div class="art-spark spark-one">✦</div><div class="art-spark spark-two">✧</div>
+      <div class="art-caption"><span class="caption-dot"></span> Care starts with noticing</div>
+    </div>
+  </div>
+</section>
+<section class="intro-section">
+  <div class="container">
+    <div class="section-heading text-center">
+      <div class="eyebrow justify-content-center">Your rose care companion</div>
+      <h2>Clear answers for <em>healthier leaves.</em></h2>
+      <p>RoseGuard helps you make sense of what you see, so you can take the next right step with confidence.</p>
+    </div>
+    <div class="row g-4 feature-row">
+      <div class="col-md-4"><article class="feature-card"><div class="feature-icon icon-leaf">✿</div><h3>Check with a photo</h3><p>Upload or capture a leaf image in moments. A trained binary model screens for healthy or unhealthy appearance.</p></article></div>
+      <div class="col-md-4"><article class="feature-card"><div class="feature-icon icon-sun">✧</div><h3>Understand the signs</h3><p>See possible symptoms, contributing conditions, and practical prevention steps alongside a confidence score.</p></article></div>
+      <div class="col-md-4"><article class="feature-card"><div class="feature-icon icon-heart">♡</div><h3>Care with confidence</h3><p>Simple, thoughtful suggestions help you decide what to inspect or discuss with a local gardening expert.</p></article></div>
+    </div>
+  </div>
+</section>
+<section class="category-strip">
+  <div class="container category-inner">
+    <div><div class="eyebrow">What we look for</div><h2>Two simple outcomes.<br><em>One healthier garden.</em></h2></div>
+    <div class="category-list"><span>Healthy</span><span>Unhealthy</span><span>General care guidance</span><span>Expert advice when needed</span></div>
+  </div>
+</section>
+<section class="bottom-cta"><div class="container bottom-cta-inner"><div><div class="eyebrow">Ready when you are</div><h2>Give your rose a closer look.</h2></div><a href="{{ url_for('detect') }}" class="btn btn-cream btn-lg">Check a leaf <span aria-hidden="true">→</span></a></div></section>
+{% endblock %}

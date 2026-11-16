@@ -1,0 +1,175 @@
+{
+  "class_names": [
+    "healthy",
+    "unhealthy"
+  ],
+  "class_mapping": {
+    "0": "healthy",
+    "1": "unhealthy"
+  },
+  "output_format": "binary_probability",
+  "backbone": "mobilenetv2",
+  "pretrained_weights": "imagenet",
+  "image_size": [
+    224,
+    224
+  ],
+  "preprocessing": {
+    "color_mode": "RGB",
+    "resize": [
+      224,
+      224
+    ],
+    "resize_antialias": true,
+    "rescale_in_model": true,
+    "rescale_factor": 0.00392156862745098,
+    "backbone_rescaling": {
+      "scale": 2.0,
+      "offset": -1.0
+    }
+  },
+  "training_images": 8,
+  "validation_images": 8,
+  "minimum_training_images_per_class": 100,
+  "minimum_validation_images_per_class": 20,
+  "minimum_test_images_per_class": 20,
+  "training_class_counts": {
+    "healthy": 4,
+    "unhealthy": 4
+  },
+  "validation_class_counts": {
+    "healthy": 4,
+    "unhealthy": 4
+  },
+  "test_class_counts": null,
+  "overlapping_images_between_splits": false,
+  "metrics_reliable": false,
+  "decision_threshold": 0.5,
+  "threshold_calibrated": false,
+  "abstention_margin": 0.05,
+  "training_accuracy": 1.0,
+  "validation_accuracy": 1.0,
+  "training_loss": 0.16554909944534302,
+  "validation_loss": 0.308840811252594,
+  "best_epoch": 20,
+  "training_evaluation": {
+    "sample_count": 8,
+    "accuracy": 1.0,
+    "threshold": 0.5,
+    "confusion_matrix": [
+      [
+        4,
+        0
+      ],
+      [
+        0,
+        4
+      ]
+    ],
+    "confusion_matrix_labels": [
+      "healthy",
+      "unhealthy"
+    ],
+    "decided_confusion_matrix": [
+      [
+        4,
+        0
+      ],
+      [
+        0,
+        4
+      ]
+    ],
+    "uncertain_count": 0,
+    "coverage": 1.0,
+    "classification_report": {
+      "healthy": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 4
+      },
+      "unhealthy": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 4
+      }
+    },
+    "macro_avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    }
+  },
+  "validation_evaluation": {
+    "sample_count": 8,
+    "accuracy": 1.0,
+    "threshold": 0.5,
+    "confusion_matrix": [
+      [
+        4,
+        0
+      ],
+      [
+        0,
+        4
+      ]
+    ],
+    "confusion_matrix_labels": [
+      "healthy",
+      "unhealthy"
+    ],
+    "decided_confusion_matrix": [
+      [
+        3,
+        0
+      ],
+      [
+        0,
+        3
+      ]
+    ],
+    "uncertain_count": 2,
+    "coverage": 0.75,
+    "classification_report": {
+      "healthy": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 4
+      },
+      "unhealthy": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 4
+      }
+    },
+    "macro_avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    }
+  },
+  "test_images": 0,
+  "test_accuracy": null,
+  "test_loss": null,
+  "test_evaluation": null,
+  "overfitting_assessment": {
+    "status": "possible_overfitting",
+    "training_validation_accuracy_gap": 0.0,
+    "training_loss": 0.17044954001903534,
+    "validation_loss": 0.308840811252594,
+    "assessment_note": "Training-history metrics include augmentation; this comparison is indicative only, and a very small validation set cannot reliably rule overfitting in or out."
+  },
+  "warnings": [
+    "healthy has 4 training image(s); add at least 96 to reach the pipeline floor of 100.",
+    "healthy has 4 validation image(s); add at least 16 to reach the pipeline floor of 20.",
+    "unhealthy has 4 training image(s); add at least 96 to reach the pipeline floor of 100.",
+    "unhealthy has 4 validation image(s); add at least 16 to reach the pipeline floor of 20.",
+    "No dataset/test split exists; independent test accuracy cannot be measured.",
+    "Decision-threshold calibration is unavailable with the current data; using the neutral 0.50 threshold.",
+    "Training metrics suggest possible overfitting; the small validation set cannot confirm this reliably."
+  ]
+}

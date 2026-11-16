@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}RoseGuard dashboard{% endblock %}
+{% block content %}
+<section class="page-hero compact-hero dashboard-hero">
+  <div class="container dashboard-hero-inner">
+    <div><div class="eyebrow">Your garden overview</div><h1>RoseGuard <em>dashboard.</em></h1><p>Live totals and recent checks from this app's local prediction history.</p></div>
+    <a href="{{ url_for('detect') }}" class="btn btn-primary-green">Check a leaf <span aria-hidden="true">→</span></a>
+  </div>
+</section>
+<section class="dashboard-section">
+  <div class="container">
+    {% if not model_status.available %}
+    <div class="dashboard-notice" role="status"><strong>AI model unavailable.</strong> {{ model_status.message }}</div>
+    {% elif model_status.warning or model_status.metrics %}
+    <div class="dashboard-notice" role="status">
+      {% if model_status.warning %}<strong>Training data warning.</strong> {{ model_status.warning }}{% endif %}
+      {% if model_status.metrics %}<br>Measured training accuracy: {{ "%.1f"|format(model_status.metrics.training_accuracy * 100) }}%; validation accuracy: {{ "%.1f"|format(model_status.metrics.validation_accuracy * 100) }}%.{% if not model_status.metrics.reliable %} These metrics are unreliable because the dataset is too small.{% endif %}{% endif %}
+    </div>
+    {% endif %}
+    <div class="dashboard-metrics">
+      <article class="dashboard-metric metric-total"><span class="metric-icon">✿</span><span class="metric-label">Total images analyzed</span><strong>{{ stats.total }}</strong><span class="metric-footnote">Recorded in local history</span></article>
+      <article class="dashboard-metric metric-healthy"><span class="metric-icon">✓</span><span class="metric-label">Healthy predictions</span><strong>{{ stats.healthy }}</strong><span class="metric-footnote">{{ stats.healthy_percent }}% of analyzed images</span></article>
+      <article class="dashboard-metric metric-unhealthy"><span class="metric-icon">!</span><span class="metric-label">Unhealthy predictions</span><strong>{{ stats.unhealthy }}</strong><span class="metric-footnote">{{ stats.unhealthy_percent }}% of analyzed images</span></article>
+      <article class="dashboard-metric metric-unidentified"><span class="metric-icon">?</span><span class="metric-label">Uncertain results</span><strong>{{ stats.unidentified }}</strong><span class="metric-footnote">{{ stats.unidentified_percent }}% within the uncertainty band</span></article>
+    </div>
+    <div class="dashboard-content">
+      <section class="dashboard-panel chart-panel" aria-labelledby="breakdown-title">
+        <div class="panel-heading"><div><div class="eyebrow">Actual prediction counts</div><h2 id="breakdown-title">Health breakdown</h2></div><span class="panel-total">{{ stats.total }} total</span></div>
+        {% if stats.total %}
+        <div class="chart-rows">
+          <div class="chart-row"><div class="chart-row-label"><span class="chart-dot chart-dot-healthy"></span><span>Healthy</span><strong>{{ stats.healthy }}</strong></div><div class="chart-track" role="progressbar" aria-label="Healthy predictions" aria-valuenow="{{ stats.healthy_percent }}" aria-valuemin="0" aria-valuemax="100"><span class="chart-fill-healthy" style="width: {{ stats.healthy_percent }}%"></span></div></div>
+          <div class="chart-row"><div class="chart-row-label"><span class="chart-dot chart-dot-unhealthy"></span><span>Unhealthy</span><strong>{{ stats.unhealthy }}</strong></div><div class="chart-track" role="progressbar" aria-label="Unhealthy predictions" aria-valuenow="{{ stats.unhealthy_percent }}" aria-valuemin="0" aria-valuemax="100"><span class="chart-fill-unhealthy" style="width: {{ stats.unhealthy_percent }}%"></span></div></div>
+          <div class="chart-row"><div class="chart-row-label"><span class="chart-dot chart-dot-unidentified"></span><span>Uncertain</span><strong>{{ stats.unidentified }}</strong></div><div class="chart-track" role="progressbar" aria-label="Uncertain predictions" aria-valuenow="{{ stats.unidentified_percent }}" aria-valuemin="0" aria-valuemax="100"><span class="chart-fill-unidentified" style="width: {{ stats.unidentified_percent }}%"></span></div></div>
+        </div>
+        <p class="chart-caption">Bars show each result as a share of the stored prediction history.</p>
+        {% else %}
+        <div class="dashboard-empty-chart"><span class="empty-flower">✿</span><p>No image checks have been recorded yet. Your chart will update after your first prediction.</p><a class="text-link" href="{{ url_for('detect') }}">Start a leaf check <span aria-hidden="true">→</span></a></div>
+        {% endif %}
+      </section>
+      <section class="dashboard-panel recent-panel" aria-labelledby="recent-title">
+        <div class="panel-heading"><div><div class="eyebrow">From your local database</div><h2 id="recent-title">Recent checks</h2></div><a class="text-link" href="{{ url_for('history') }}">View all <span aria-hidden="true">↗</span></a></div>
+        {% if records %}
+        <div class="dashboard-recent-list">
+          {% for record in records %}
+          <a class="dashboard-recent-item" href="{{ url_for('result', prediction_id=record.id) }}">
+            <img src="{{ url_for('static', filename='uploads/' ~ record.image_filename) }}" alt="Uploaded rose leaf">
+            <span class="recent-file-copy"><strong title="{{ record.original_filename }}">{{ record.original_filename }}</strong><small>{{ record.created_at[:19].replace('T', ' ') }} UTC · {{ "%.1f"|format(record.model_score * 100) }}% {{ 'top score' if record.disease.status == 'unidentified' else 'confidence' }}</small></span>
+            <span class="status-pill status-{{ record.disease.status }}"><span></span>{{ record.disease.status|upper }}</span>
+          </a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="dashboard-empty-recent"><p>Recent image checks will appear here after they are saved.</p><a class="btn btn-primary-green" href="{{ url_for('detect') }}">Upload a rose leaf</a></div>
+        {% endif %}
+      </section>
+    </div>
+    <p class="dashboard-disclaimer">RoseGuard's two-class CNN does not diagnose a specific condition. Results and confidence depend on the quality and amount of labeled training data; consult a plant-health expert when needed.</p>
+  </div>
+</section>
+{% endblock %}

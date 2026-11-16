@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Prediction history{% endblock %}
+{% block content %}
+<section class="page-hero compact-hero"><div class="container"><div class="eyebrow">Your garden notes</div><h1>Recent <em>leaf checks.</em></h1><p>Previous image checks are stored locally in this app for quick reference.</p></div></section>
+<section class="history-section"><div class="container">
+  {% if records %}
+  <div class="history-grid">{% for record in records %}<a class="history-card" href="{{ url_for('result', prediction_id=record.id) }}"><img src="{{ url_for('static', filename='uploads/' ~ record.image_filename) }}" alt="Rose leaf from {{ record.created_at }}"><div class="history-card-body"><span class="status-pill status-{{ record.disease.status }}"><span></span>{{ 'UNCERTAIN' if record.disease.status == 'unidentified' else record.disease.status|upper }}</span><h2>{{ record.disease.display_name }}</h2><p class="history-filename" title="{{ record.original_filename }}">{{ record.original_filename }}</p><p>{{ "%.1f"|format(record.model_score * 100) }}% {{ 'top score' if record.disease.status == 'unidentified' else 'confidence' }}</p><time>{{ record.created_at[:19].replace('T', ' ') }} UTC</time></div><span class="history-arrow" aria-hidden="true">↗</span></a>{% endfor %}</div>
+  {% else %}
+  <div class="empty-history"><div class="empty-flower">✿</div><h2>No leaf checks yet</h2><p>Your completed checks will appear here.</p><a href="{{ url_for('detect') }}" class="btn btn-primary-green">Start a leaf check <span aria-hidden="true">→</span></a></div>
+  {% endif %}
+</div></section>
+{% endblock %}
